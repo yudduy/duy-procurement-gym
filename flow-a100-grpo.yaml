@@ -1,0 +1,13 @@
+# Full SFT→merge→GRPO→eval pipeline on A100-80GB.
+# No volumes needed — clones from git, runs everything locally.
+name: procurement-grpo-a100
+instance_type: 1xa100
+max_price_per_hour: 0.03
+upload_code: false
+terminate_on_exit: true
+command: |
+  set -euo pipefail
+  unset http_proxy https_proxy
+  git clone -b fix/sft-grpo-merge https://github.com/yudduy/duy-procurement-gym.git /home/ubuntu/procurement-gym
+  cd /home/ubuntu/procurement-gym
+  bash scripts/run_a100.sh
