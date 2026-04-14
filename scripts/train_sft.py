@@ -54,7 +54,7 @@ def main() -> None:
         learning_rate=2e-4,
         lr_scheduler_type="cosine",
         warmup_ratio=0.1,
-        max_seq_length=4096,
+        max_length=4096,
         logging_steps=10,
         save_steps=50,
         save_total_limit=3,
