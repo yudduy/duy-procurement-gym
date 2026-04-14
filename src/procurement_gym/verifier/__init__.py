@@ -4,10 +4,15 @@
 
 from procurement_gym.verifier.parser import parse_partition, validate_partition
 from procurement_gym.verifier.reward import ProcurementVerifier
-from procurement_gym.verifier.serializer import serialize_instance, serialize_partition
+from procurement_gym.verifier.serializer import (
+    SYSTEM_PROMPT,
+    serialize_instance,
+    serialize_partition,
+)
 
 __all__ = [
     "ProcurementVerifier",
+    "SYSTEM_PROMPT",
     "parse_partition",
     "serialize_instance",
     "serialize_partition",

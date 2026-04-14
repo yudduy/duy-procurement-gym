@@ -20,8 +20,8 @@ sys.path.insert(0, "src")
 
 from procurement_gym.config import InstanceConfig, SupplierModelConfig
 from procurement_gym.instances.transport import TransportInstanceGenerator
-from procurement_gym.verifier.reward import ProcurementVerifier
-from procurement_gym.verifier.serializer import serialize_instance
+from procurement_gym.verifier.reward import ProcurementVerifier, format_reward
+from procurement_gym.verifier.serializer import SYSTEM_PROMPT, serialize_instance
 
 
 # --- Reward function (module-level for pickling) ---
@@ -67,13 +67,6 @@ def make_grpo_dataset(n_instances: int = 1000, base_seed: int = 600000) -> Datas
     ic = InstanceConfig(n_items=20, n_suppliers=10, n_categories=3)
     gen = TransportInstanceGenerator(ic, sc)
 
-    system_msg = (
-        "You are a procurement optimization expert. "
-        "Analyze the items and suppliers, then output your partition. "
-        "Keep reasoning brief. You MUST end with the partition in the exact format: "
-        "<partition>[lot_id_for_item_0, lot_id_for_item_1, ...]</partition>"
-    )
-
     records = []
     for i in range(n_instances):
         seed = base_seed + i
@@ -82,7 +75,7 @@ def make_grpo_dataset(n_instances: int = 1000, base_seed: int = 600000) -> Datas
         records.append(
             {
                 "prompt": [
-                    {"role": "system", "content": system_msg},
+                    {"role": "system", "content": SYSTEM_PROMPT},
                     {"role": "user", "content": prompt_text},
                 ],
                 "instance_seed": seed,
@@ -126,26 +119,31 @@ def main() -> None:
     )
 
     # GRPO config
+    # ADAPTED FROM: gridplan-train configs/stage_b_rlvr.yaml + clock-game-rl train_grpo.py
     training_args = GRPOConfig(
         output_dir=output_dir,
         num_train_epochs=1,
-        per_device_train_batch_size=4,
+        per_device_train_batch_size=1,
         gradient_accumulation_steps=4,
         learning_rate=5e-6,
         lr_scheduler_type="cosine",
         warmup_ratio=0.1,
         num_generations=8,
-        max_completion_length=256,
-        temperature=1.5,
+        max_completion_length=512,
+        temperature=0.9,
         beta=0.04,
+        scale_rewards="group",
+        reward_weights=[1.0, 0.5],
         logging_steps=1,
         save_steps=50,
         save_total_limit=3,
         bf16=True,
         gradient_checkpointing=True,
+        gradient_checkpointing_kwargs={"use_reentrant": False},
         report_to="none",
         seed=42,
         use_vllm=False,
+        log_completions=True,
     )
 
     # Load model — merge SFT adapter if it's a PEFT checkpoint
@@ -173,10 +171,12 @@ def main() -> None:
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
-    # Train
+    # Train — two reward functions (Clock Game pattern):
+    # 1. procurement_reward_fn: buyer welfare from OR-Tools (weight=1.0)
+    # 2. format_reward: <partition> tags present (weight=0.5)
     trainer = GRPOTrainer(
         model=model,
-        reward_funcs=procurement_reward_fn,
+        reward_funcs=[procurement_reward_fn, format_reward],
         args=training_args,
         train_dataset=dataset,
         processing_class=tokenizer,

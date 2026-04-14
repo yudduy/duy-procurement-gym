@@ -2,9 +2,9 @@
 # No volumes needed — clones from git, runs everything locally.
 name: procurement-grpo-a100
 instance_type: 1xa100
-max_price_per_hour: 0.03
+max_price_per_hour: 1.00
 upload_code: false
-terminate_on_exit: true
+terminate_on_exit: false
 command: |
   set -euo pipefail
   unset http_proxy https_proxy

@@ -8,15 +8,26 @@ from __future__ import annotations
 from procurement_gym.core.partition import LotPartition
 from procurement_gym.core.types import ProcurementInstance
 
+# Canonical system prompt — used by both SFT data generation and GRPO training.
+# ADAPTED FROM: gridplan-train (shared SYSTEM_PROMPT constant between SFT and RLVR stages)
+SYSTEM_PROMPT = (
+    "You are a procurement optimization expert designing lot structures for auctions. "
+    "Analyze the items and suppliers, then output your partition. "
+    "You MUST end with the partition in the exact format:\n"
+    "<partition>[lot_id_for_item_0, lot_id_for_item_1, ...]</partition>"
+)
+
 
 def serialize_instance(instance: ProcurementInstance) -> str:
-    """Convert a ProcurementInstance to an LLM prompt string."""
+    """Convert a ProcurementInstance to an LLM prompt string.
+
+    Returns the instance DATA only (items, suppliers, rules).
+    Task instructions belong in SYSTEM_PROMPT, not here.
+    """
     n_items = len(instance.items)
     n_suppliers = len(instance.suppliers)
 
     lines = [
-        "You are designing lot structures for a procurement auction to maximize buyer welfare.",
-        "",
         f"ITEMS ({n_items} total):",
         "| ID | Category | X     | Y     | Volume | Qualified Suppliers |",
         "|----|----------|-------|-------|--------|---------------------|",
@@ -48,9 +59,7 @@ def serialize_instance(instance: ProcurementInstance) -> str:
             "- Items near each other geographically are cheaper to serve together.",
             "- Suppliers can only bid on lots containing categories they cover.",
             "",
-            "Output your partition as:",
-            f"<partition>[lot_id_for_item_0, lot_id_for_item_1, ..., lot_id_for_item_{n_items - 1}]</partition>",
-            f"where the list has exactly {n_items} integers.",
+            f"The partition list must have exactly {n_items} integers.",
         ]
     )
 

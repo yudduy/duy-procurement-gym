@@ -62,6 +62,7 @@ def main() -> None:
         gradient_checkpointing=True,
         report_to="none",
         seed=42,
+        completion_only_loss=True,
     )
 
     # Load model

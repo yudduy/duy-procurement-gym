@@ -13,6 +13,35 @@ from procurement_gym.evaluation import evaluate_partition
 from procurement_gym.verifier.parser import parse_partition, validate_partition
 
 
+def _extract_text(completion: list[dict[str, str]] | str) -> str:
+    """Extract text from a completion (handles both string and message-dict formats).
+
+    ADAPTED FROM: clock-game-rl/rewards/clock_game_rewards.py
+    """
+    if isinstance(completion, str):
+        return completion
+    # Message dict format — get last assistant message
+    for msg in reversed(completion):
+        if msg.get("role") == "assistant":
+            return msg.get("content", "")
+    # Fallback: last message content
+    return completion[-1].get("content", "") if completion else ""
+
+
+def format_reward(completions: list[Any], **kwargs: Any) -> list[float]:
+    """Reward for correct output format: <partition>[...]</partition> tags present.
+
+    Returns 1.0 if tags found, 0.0 otherwise.
+    ADAPTED FROM: clock-game-rl format_reward (0.5 for structure + 0.5 for action)
+    """
+    rewards = []
+    for completion in completions:
+        text = _extract_text(completion)
+        has_tags = "<partition>" in text and "</partition>" in text
+        rewards.append(1.0 if has_tags else 0.0)
+    return rewards
+
+
 class ProcurementVerifier:
     """Deterministic verifier that scores LLM-generated lot partitions.
 
@@ -40,14 +69,7 @@ class ProcurementVerifier:
 
     def _score_one(self, completion: list[dict[str, str]]) -> float:
         """Score a single completion."""
-        # Extract text from last assistant message
-        text = ""
-        for msg in reversed(completion):
-            if msg.get("role") == "assistant":
-                text = msg.get("content", "")
-                break
-        if not text:
-            text = completion[-1].get("content", "") if completion else ""
+        text = _extract_text(completion)
 
         # Parse
         partition = parse_partition(text, self._n_items)
