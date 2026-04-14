@@ -136,6 +136,7 @@ def main() -> None:
         warmup_ratio=0.1,
         num_generations=8,
         max_completion_length=256,
+        temperature=1.5,
         beta=0.04,
         logging_steps=1,
         save_steps=50,
