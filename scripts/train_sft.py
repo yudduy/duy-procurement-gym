@@ -69,7 +69,7 @@ def main() -> None:
         model_name,
         torch_dtype="auto",
         trust_remote_code=True,
-        attn_implementation="flash_attention_2",
+        attn_implementation="sdpa",
     )
 
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
