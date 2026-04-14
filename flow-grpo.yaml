@@ -3,9 +3,12 @@
 name: procurement-grpo
 instance_type: 1xneb-b200
 max_price_per_hour: 0.10
-upload_code: true
+upload_code: false
 terminate_on_exit: true
 command: |
+  set -euo pipefail
+  git clone -b fix/sft-grpo-merge https://github.com/yudduy/duy-procurement-gym.git /home/ubuntu/procurement-gym
+  cd /home/ubuntu/procurement-gym
   bash scripts/run_grpo.sh
 volumes:
   - name: proc-ckpts
