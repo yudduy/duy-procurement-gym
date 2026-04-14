@@ -13,8 +13,9 @@ source /home/ubuntu/venv/bin/activate
 
 echo "=== Installing deps ==="
 pip install --no-deps trl peft
-pip install datasets accelerate bitsandbytes safetensors
-pip install ortools pydantic numpy
+pip install datasets accelerate bitsandbytes safetensors transformers
+pip install ortools pydantic numpy scipy gymnasium
+touch README.md
 pip install -e . --no-deps
 
 echo "=== Verifying ==="
