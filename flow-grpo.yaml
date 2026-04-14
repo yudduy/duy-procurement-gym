@@ -2,7 +2,7 @@
 # Loads SFT checkpoint from volume, merges LoRA, trains GRPO on top.
 name: procurement-grpo
 instance_type: 1xneb-b200
-max_price_per_hour: 0.03
+max_price_per_hour: 0.10
 upload_code: false
 terminate_on_exit: true
 command: |
@@ -11,7 +11,7 @@ command: |
   export TRITON_PTXAS_PATH=/usr/local/cuda/bin/ptxas
 
   # Clone repo
-  git clone https://github.com/yudduy/duy-procurement-gym.git /workspace/procurement-gym
+  git clone -b fix/sft-grpo-merge https://github.com/yudduy/duy-procurement-gym.git /workspace/procurement-gym
   cd /workspace/procurement-gym
 
   # Install deps (never pip install torch on B200)
