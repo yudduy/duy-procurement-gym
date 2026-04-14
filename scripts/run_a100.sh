@@ -7,6 +7,10 @@ unset http_proxy https_proxy
 
 cd /home/ubuntu/procurement-gym
 
+echo "=== Setting up venv ==="
+python3 -m venv --system-site-packages /home/ubuntu/venv
+source /home/ubuntu/venv/bin/activate
+
 echo "=== Installing deps ==="
 pip install --no-deps trl peft
 pip install datasets accelerate bitsandbytes safetensors
