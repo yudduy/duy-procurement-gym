@@ -147,18 +147,16 @@ def main() -> None:
         use_vllm=False,
     )
 
-    # Load model
+    # Load model — use base model name for GRPO (it applies its own LoRA)
+    base_model = "Qwen/Qwen2.5-7B-Instruct"
     model = AutoModelForCausalLM.from_pretrained(
-        model_name,
+        base_model,
         torch_dtype="auto",
         trust_remote_code=True,
-        attn_implementation="flash_attention_2",
+        attn_implementation="sdpa",
     )
 
-    tokenizer = AutoTokenizer.from_pretrained(
-        model_name if "checkpoint" not in model_name else "Qwen/Qwen2.5-7B-Instruct",
-        trust_remote_code=True,
-    )
+    tokenizer = AutoTokenizer.from_pretrained(base_model, trust_remote_code=True)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
