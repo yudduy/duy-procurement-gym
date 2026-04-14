@@ -1,0 +1,41 @@
+# GRPO training on B200 with SFT adapter merge.
+# Loads SFT checkpoint from volume, merges LoRA, trains GRPO on top.
+name: procurement-grpo
+instance_type: 1xneb-b200
+max_price_per_hour: 0.03
+upload_code: false
+terminate_on_exit: true
+command: |
+  set -euo pipefail
+  unset http_proxy https_proxy
+  export TRITON_PTXAS_PATH=/usr/local/cuda/bin/ptxas
+
+  # Clone repo
+  git clone https://github.com/yudduy/duy-procurement-gym.git /workspace/procurement-gym
+  cd /workspace/procurement-gym
+
+  # Install deps (never pip install torch on B200)
+  pip install --no-deps trl peft
+  pip install datasets accelerate bitsandbytes safetensors
+  pip install ortools pydantic numpy
+  pip install fa4 2>/dev/null || true
+  pip install -e . --no-deps
+
+  # Verify
+  python -c "import torch; print(f'torch={torch.__version__}, cuda={torch.cuda.is_available()}')"
+  python -c "from peft import AutoPeftModelForCausalLM; print('PEFT OK')"
+
+  # Check SFT checkpoint exists
+  ls -la /volumes/proc/sft/final/ || echo "WARNING: No SFT checkpoint found, will use base model"
+
+  # GRPO with SFT merge (1000 instances, saves to volume)
+  python scripts/train_grpo.py /volumes/proc/sft/final /volumes/proc/grpo 1000
+
+  # Eval on held-out instances
+  python scripts/eval_model.py /volumes/proc/grpo/final 20 700000
+volumes:
+  - name: proc-ckpts
+    size_gb: 50
+    mount_path: /volumes/proc
+    interface: file
+    create_if_missing: true

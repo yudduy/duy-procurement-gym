@@ -6,11 +6,12 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
 
 import numpy as np
 from datasets import Dataset
-from peft import LoraConfig
+from peft import AutoPeftModelForCausalLM, LoraConfig
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from trl import GRPOConfig, GRPOTrainer
 
@@ -146,16 +147,28 @@ def main() -> None:
         use_vllm=False,
     )
 
-    # Load model — use base model name for GRPO (it applies its own LoRA)
-    base_model = "Qwen/Qwen2.5-7B-Instruct"
-    model = AutoModelForCausalLM.from_pretrained(
-        base_model,
-        torch_dtype="auto",
-        trust_remote_code=True,
-        attn_implementation="sdpa",
-    )
+    # Load model — merge SFT adapter if it's a PEFT checkpoint
+    base_model_name = "Qwen/Qwen2.5-7B-Instruct"
+    if os.path.exists(os.path.join(model_name, "adapter_config.json")):
+        print(f"Loading SFT PEFT checkpoint from {model_name}")
+        sft_model = AutoPeftModelForCausalLM.from_pretrained(
+            model_name,
+            torch_dtype="auto",
+            trust_remote_code=True,
+            attn_implementation="sdpa",
+        )
+        model = sft_model.merge_and_unload()
+        print("SFT LoRA merged into base model — GRPO will add fresh LoRA on top")
+    else:
+        print(f"Loading base model from {model_name}")
+        model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            torch_dtype="auto",
+            trust_remote_code=True,
+            attn_implementation="sdpa",
+        )
 
-    tokenizer = AutoTokenizer.from_pretrained(base_model, trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained(base_model_name, trust_remote_code=True)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
