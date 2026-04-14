@@ -1,0 +1,47 @@
+[project]
+name = "procurement-gym"
+version = "0.1.0"
+description = "RL environment for procurement lot structure optimization"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "gymnasium>=1.0",
+    "numpy>=2.0",
+    "ortools>=9.10",
+    "scipy>=1.14",
+    "pydantic>=2.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3", "mypy>=1.13", "ruff>=0.8"]
+
+[build-system]
+requires = ["uv_build>=0.10.11,<0.11.0"]
+build-backend = "uv_build"
+
+[tool.mypy]
+strict = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = "ortools.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "scipy.*"
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.20.1",
+    "pytest>=9.0.3",
+    "ruff>=0.15.10",
+]
