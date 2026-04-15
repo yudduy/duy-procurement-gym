@@ -129,6 +129,7 @@ def main() -> None:
         lr_scheduler_type="cosine",
         warmup_ratio=0.1,
         num_generations=8,
+        generation_batch_size=8,
         max_completion_length=512,
         temperature=0.9,
         beta=0.04,
