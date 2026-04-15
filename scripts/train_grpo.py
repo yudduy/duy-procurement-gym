@@ -89,7 +89,7 @@ def make_grpo_dataset(n_instances: int = 1000, base_seed: int = 600000) -> Datas
 
 
 def main() -> None:
-    model_name = sys.argv[1] if len(sys.argv) > 1 else "checkpoints/sft/final"
+    model_name = sys.argv[1] if len(sys.argv) > 1 else "Qwen/Qwen2.5-7B-Instruct"
     output_dir = sys.argv[2] if len(sys.argv) > 2 else "checkpoints/grpo"
     n_instances = int(sys.argv[3]) if len(sys.argv) > 3 else 1000
 
@@ -131,7 +131,7 @@ def main() -> None:
         num_generations=8,
         generation_batch_size=8,
         max_completion_length=512,
-        temperature=0.9,
+        temperature=1.0,
         beta=0.04,
         scale_rewards="group",
         reward_weights=[1.0, 0.5],

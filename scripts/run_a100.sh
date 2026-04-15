@@ -27,13 +27,10 @@ echo "=== Smoke Test: 3-step GRPO on base model ==="
 python scripts/smoke_test_gpu.py Qwen/Qwen2.5-7B-Instruct 1.0
 echo "=== Smoke test passed — proceeding to training ==="
 
-echo "=== Stage 1: SFT ==="
-python scripts/train_sft.py Qwen/Qwen2.5-7B-Instruct sft_data.jsonl checkpoints/sft
+echo "=== GRPO (directly on base model — SFT skipped, base has sufficient diversity) ==="
+python scripts/train_grpo.py Qwen/Qwen2.5-7B-Instruct checkpoints/grpo 500
 
-echo "=== Stage 2: GRPO (merges SFT LoRA automatically) ==="
-python scripts/train_grpo.py checkpoints/sft/final checkpoints/grpo 500
-
-echo "=== Stage 3: Eval ==="
+echo "=== Eval ==="
 python scripts/eval_model.py checkpoints/grpo/final 20 700000
 
 echo "=== DONE ==="

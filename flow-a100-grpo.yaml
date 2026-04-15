@@ -2,7 +2,7 @@
 # No volumes needed — clones from git, runs everything locally.
 name: procurement-grpo-a100
 instance_type: 1xa100
-max_price_per_hour: 1.00
+max_price_per_hour: 0.50
 upload_code: false
 terminate_on_exit: false
 command: |
