@@ -80,7 +80,7 @@ def main() -> None:
     # 1. Check GPU
     print(
         f"\n[1/6] GPU: {torch.cuda.get_device_name(0)}, "
-        f"VRAM: {torch.cuda.get_device_properties(0).total_mem / 1e9:.1f} GB"
+        f"VRAM: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB"
     )
 
     # 2. Build dataset
