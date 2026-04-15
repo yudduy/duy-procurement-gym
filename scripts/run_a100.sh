@@ -23,6 +23,10 @@ python -c "import torch; print(f'torch={torch.__version__}, cuda={torch.cuda.is_
 python -c "from trl import SFTTrainer, GRPOTrainer; print('TRL OK')"
 python -c "from procurement_gym.verifier.reward import ProcurementVerifier; print('Verifier OK')"
 
+echo "=== Smoke Test: 3-step GRPO on base model ==="
+python scripts/smoke_test_gpu.py Qwen/Qwen2.5-7B-Instruct 1.0
+echo "=== Smoke test passed — proceeding to training ==="
+
 echo "=== Stage 1: SFT ==="
 python scripts/train_sft.py Qwen/Qwen2.5-7B-Instruct sft_data.jsonl checkpoints/sft
 
