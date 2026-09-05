@@ -69,11 +69,19 @@ class ThreeLayerSupplierSimulator:
             item_idxs = partition.lot_items(lot_id)
             lot_items: list[Item] = [instance.items[i] for i in item_idxs]
             lot_categories = {item.category for item in lot_items}
+            lot_volume = sum(item.volume for item in lot_items)
+            qualified_for_all_items = frozenset.intersection(
+                *(item.qualified_supplier_ids for item in lot_items)
+            )
 
-            # Step 1: Determine eligible suppliers (category match)
+            # Step 1: Determine eligible suppliers.
+            # A supplier must be feasible for the whole lot, not just overlap one category.
             eligible: list[int] = []
             for s in instance.suppliers:
-                if s.categories & lot_categories:
+                covers_lot = lot_categories <= s.categories
+                qualified_for_lot = s.id in qualified_for_all_items
+                can_serve_volume = lot_volume <= s.capacity
+                if covers_lot and qualified_for_lot and can_serve_volume:
                     eligible.append(s.id)
 
             n_eligible = len(eligible)
@@ -129,9 +137,10 @@ class ThreeLayerSupplierSimulator:
                 )
                 lot_costs[sid] = cost
 
-                # Layer 3: Markup (competitors = other entrants, excluding self)
+                # Layer 3: Markup. Use total bidders in the lot market so duopoly
+                # is more competitive than monopoly.
                 markup = compute_markup(
-                    n_competitors=max(0, n_entrants - 1),
+                    n_competitors=n_entrants,
                     markup_alpha=supplier.markup_alpha,
                     markup_beta=supplier.markup_beta,
                 )

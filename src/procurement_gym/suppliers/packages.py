@@ -56,6 +56,7 @@ def generate_package_bids(
     for sid, s_lots in supplier_lots.items():
         if len(s_lots) < 2:
             continue
+        supplier_candidates: list[tuple[float, float, PackageBid]] = []
 
         # Enumerate subsets of size 2..max_package_size
         for size in range(2, min(config.max_package_size, len(s_lots)) + 1):
@@ -78,14 +79,20 @@ def generate_package_bids(
                 # Package price = sum of individual bids * (1 - discount)
                 individual_sum = sum(per_lot_bids[lid][sid] for lid in combo)
                 pkg_price = individual_sum * (1.0 - discount)
-
-                packages.append(
-                    PackageBid(
-                        supplier_id=sid,
-                        lot_ids=frozenset(combo),
-                        price=pkg_price,
-                    )
+                package = PackageBid(
+                    supplier_id=sid,
+                    lot_ids=frozenset(combo),
+                    price=pkg_price,
                 )
+                savings = individual_sum - pkg_price
+                supplier_candidates.append((savings, synergy, package))
+
+        # Keep the most economically meaningful packages per supplier.
+        supplier_candidates.sort(key=lambda x: (-x[0], -x[1], len(x[2].lot_ids)))
+        packages.extend(
+            package
+            for _, _, package in supplier_candidates[: config.max_packages_per_supplier]
+        )
 
     return tuple(packages)
 

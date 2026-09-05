@@ -1,0 +1,237 @@
+{
+  "1_single_item_degeneracy": {
+    "attack": "single_item_degeneracy",
+    "summary": {
+      "category": {
+        "mean_reward": 19094.993110645726,
+        "mean_n_lots": 3.0,
+        "mean_unserviced": 0.0,
+        "mean_package_bids": 6.9733333333333345,
+        "mean_package_awards": 0.7999999999999999,
+        "mean_total_cost": 1078.4609066666667
+      },
+      "single_item": {
+        "mean_reward": 23116.19156921528,
+        "mean_n_lots": 20.0,
+        "mean_unserviced": 0.43333333333333335,
+        "mean_package_bids": 733.5533333333333,
+        "mean_package_awards": 8.533333333333333,
+        "mean_total_cost": -7799.071360000002
+      },
+      "geographic": {
+        "mean_reward": 14984.843050140355,
+        "mean_n_lots": 3.0,
+        "mean_unserviced": 0.08666666666666668,
+        "mean_package_bids": 3.86,
+        "mean_package_awards": 0.46666666666666673,
+        "mean_total_cost": 1128.4544866666665
+      }
+    },
+    "verdict": "PASS: Single-item wins genuinely, not through penalty avoidance"
+  },
+  "2_reward_gap_magnitude": {
+    "attack": "reward_gap_magnitude",
+    "results": {
+      "0.0": {
+        "coupling": 0.0,
+        "mean_gap_ratio": 0.8535166345752649,
+        "median_gap_ratio": 0.8997816623828188,
+        "pct_gap_lt_1": 3.3333333333333335,
+        "mean_absolute_gap": 8760.98281198463,
+        "mean_relative_gap": 0.49577735172519416
+      },
+      "0.5": {
+        "coupling": 0.5,
+        "mean_gap_ratio": 0.5122374660534464,
+        "median_gap_ratio": 0.5136917364655631,
+        "pct_gap_lt_1": 3.3333333333333335,
+        "mean_absolute_gap": 4370.966843098757,
+        "mean_relative_gap": 0.23107459574162173
+      },
+      "1.0": {
+        "coupling": 1.0,
+        "mean_gap_ratio": 0.5345040701919291,
+        "median_gap_ratio": 0.5000250414137646,
+        "pct_gap_lt_1": 3.3333333333333335,
+        "mean_absolute_gap": 4100.655014995664,
+        "mean_relative_gap": 0.16238254674917388
+      }
+    },
+    "verdict": "PASS: Gaps are meaningful (ratio=0.53, relative=0.162)"
+  },
+  "3_nlots_sensitivity": {
+    "attack": "nlots_sensitivity",
+    "wins_by_nlots": {
+      "2": {
+        "geographic": 2,
+        "category": 8,
+        "single_item": 10
+      },
+      "3": {
+        "geographic": 1,
+        "equal_size": 2,
+        "random": 4,
+        "single_item": 8,
+        "category": 5
+      },
+      "5": {
+        "random": 3,
+        "category": 7,
+        "equal_size": 2,
+        "single_item": 8
+      },
+      "7": {
+        "random": 3,
+        "category": 6,
+        "equal_size": 1,
+        "single_item": 8,
+        "geographic": 2
+      },
+      "10": {
+        "category": 7,
+        "single_item": 9,
+        "geographic": 2,
+        "random": 1,
+        "equal_size": 1
+      }
+    },
+    "worst_dominance": {
+      "n_lots": 2,
+      "pct": 50.0
+    },
+    "verdict": "PASS: No n_lots setting creates >70% dominance (worst: 50% at n_lots=2)"
+  },
+  "4_hybrid_strategy": {
+    "attack": "hybrid_strategy",
+    "results": {
+      "0.0": {
+        "coupling": 0.0,
+        "wins": {
+          "category": 27,
+          "category_geo_mix": 2,
+          "geographic": 1
+        },
+        "win_rates": {
+          "category": 90.0,
+          "category_geo_mix": 6.7,
+          "geographic": 3.3
+        },
+        "mean_rewards": {
+          "category": 17237.7,
+          "single_item": -9252.2,
+          "geographic": 6828.8,
+          "oracle_hybrid": 17237.7,
+          "category_geo_mix": 16696.1
+        }
+      },
+      "0.5": {
+        "coupling": 0.5,
+        "wins": {
+          "category": 19,
+          "category_geo_mix": 8,
+          "geographic": 3
+        },
+        "win_rates": {
+          "category": 63.3,
+          "category_geo_mix": 26.7,
+          "geographic": 10.0
+        },
+        "mean_rewards": {
+          "category": 17964.9,
+          "single_item": 6183.6,
+          "geographic": 10381.2,
+          "oracle_hybrid": 10381.2,
+          "category_geo_mix": 18074.6
+        }
+      },
+      "1.0": {
+        "coupling": 1.0,
+        "wins": {
+          "category": 9,
+          "category_geo_mix": 6,
+          "single_item": 13,
+          "geographic": 2
+        },
+        "win_rates": {
+          "category": 30.0,
+          "category_geo_mix": 20.0,
+          "single_item": 43.3,
+          "geographic": 6.7
+        },
+        "mean_rewards": {
+          "category": 17976.5,
+          "single_item": 20134.7,
+          "geographic": 15631.5,
+          "oracle_hybrid": 20134.7,
+          "category_geo_mix": 18687.1
+        }
+      }
+    },
+    "verdict": "PASS: No hybrid dominates across all coupling levels (oracle=0/90, mix=16/90)"
+  },
+  "5_package_utilization": {
+    "attack": "package_utilization",
+    "avg_package_bids": 5.3,
+    "avg_package_awards": 0.62,
+    "pct_with_awards": 2.5,
+    "reward_with_coupling_mean": 18812.4,
+    "reward_without_coupling_mean": 18274.6,
+    "verdict": "FAIL: Only 2% of evaluations have package awards \u2014 insufficient utilization"
+  },
+  "6_seed_sensitivity": {
+    "attack": "seed_sensitivity",
+    "results_by_range": {
+      "original": {
+        "wins": {
+          "single_item": 16,
+          "geographic": 2,
+          "random": 2,
+          "category": 7,
+          "equal_size": 3
+        },
+        "win_rates": {
+          "single_item": 53.3,
+          "geographic": 6.7,
+          "random": 6.7,
+          "category": 23.3,
+          "equal_size": 10.0
+        }
+      },
+      "shifted_50k": {
+        "wins": {
+          "category": 9,
+          "single_item": 16,
+          "equal_size": 2,
+          "random": 1,
+          "geographic": 2
+        },
+        "win_rates": {
+          "category": 30.0,
+          "single_item": 53.3,
+          "equal_size": 6.7,
+          "random": 3.3,
+          "geographic": 6.7
+        }
+      },
+      "shifted_99k": {
+        "wins": {
+          "random": 2,
+          "single_item": 18,
+          "category": 6,
+          "equal_size": 2,
+          "geographic": 2
+        },
+        "win_rates": {
+          "random": 6.7,
+          "single_item": 60.0,
+          "category": 20.0,
+          "equal_size": 6.7,
+          "geographic": 6.7
+        }
+      }
+    },
+    "consistent_winner": true,
+    "max_swing_pp": 10.0,
+    "verdict": "PASS: Results stable across seed ranges (max swing: 10pp, consistent winner: single_item)"
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "config": {
+    "coupling_strength": 1.0,
+    "n_items": 20,
+    "n_suppliers": 10,
+    "n_categories": 3,
+    "determinism_instances": 5,
+    "signal_instances": 30,
+    "runtime_curve_instances": 3,
+    "search_probe_instances": 8,
+    "search_probe_restarts": 3,
+    "search_probe_max_steps": 15,
+    "min_mean_relative_gap": 0.02,
+    "min_package_award_fraction": 0.25,
+    "max_single_baseline_win_rate": 0.8,
+    "max_worst_case_p95_wall_s": 1.0,
+    "min_search_win_rate_gt_2pct": 0.2
+  },
+  "determinism_and_sanity": {
+    "max_reward_diff_across_seeds": 0.0,
+    "negative_total_cost_evals": 0,
+    "total_evals": 50,
+    "passed": true
+  },
+  "signal_and_mechanism": {
+    "win_counts": {
+      "category": 22,
+      "geographic": 6,
+      "equal_size": 2
+    },
+    "win_rates": {
+      "category": 0.7333333333333333,
+      "geographic": 0.2,
+      "equal_size": 0.06666666666666667
+    },
+    "mean_rewards": {
+      "category": 18476.394863328318,
+      "geographic": 6598.588912591976,
+      "equal_size": 3706.3090734219177,
+      "random": 7767.0339734640875,
+      "single_item": 15433.256296661653
+    },
+    "status_counts": {
+      "category": {
+        "OPTIMAL": 30
+      },
+      "geographic": {
+        "OPTIMAL": 25,
+        "INFEASIBLE": 5
+      },
+      "equal_size": {
+        "OPTIMAL": 21,
+        "INFEASIBLE": 8,
+        "ALL_UNSERVICED": 1
+      },
+      "random": {
+        "OPTIMAL": 25,
+        "INFEASIBLE": 4,
+        "ALL_UNSERVICED": 1
+      },
+      "single_item": {
+        "OPTIMAL": 30
+      }
+    },
+    "mean_top1_top2_gap": 698.6529666666664,
+    "median_top1_top2_gap": 182.97249999999804,
+    "mean_relative_gap": 0.0381843943161301,
+    "package_award_fraction": 0.6066666666666667,
+    "mean_package_bids": 120.32,
+    "p95_package_bids": 613.7499999999999,
+    "max_package_bids": 640,
+    "mean_package_awards": 1.6,
+    "p95_package_awards": 7.0,
+    "max_single_baseline_win_rate": 0.7333333333333333,
+    "passed": true
+  },
+  "runtime_curve": {
+    "curve": {
+      "2": {
+        "mean_wall_s": 0.0009726526665569205,
+        "p95_wall_s": 0.00202117079988966,
+        "max_wall_s": 0.0022053749999031425,
+        "mean_package_bids": 1.3333333333333333,
+        "max_package_bids": 2,
+        "mean_package_awards": 0.0
+      },
+      "3": {
+        "mean_wall_s": 0.0011131806665313586,
+        "p95_wall_s": 0.0024053041992374343,
+        "max_wall_s": 0.002630249999128864,
+        "mean_package_bids": 5.666666666666667,
+        "max_package_bids": 9,
+        "mean_package_awards": 0.3333333333333333
+      },
+      "5": {
+        "mean_wall_s": 0.00419330566667971,
+        "p95_wall_s": 0.0048873039002501175,
+        "max_wall_s": 0.00491320800028916,
+        "mean_package_bids": 55.0,
+        "max_package_bids": 80,
+        "mean_package_awards": 1.3333333333333333
+      },
+      "10": {
+        "mean_wall_s": 0.018596430665638763,
+        "p95_wall_s": 0.02302641279893578,
+        "max_wall_s": 0.023078541998984292,
+        "mean_package_bids": 250.33333333333334,
+        "max_package_bids": 316,
+        "mean_package_awards": 3.3333333333333335
+      },
+      "20": {
+        "mean_wall_s": 0.07867513900055201,
+        "p95_wall_s": 0.0934000711009503,
+        "max_wall_s": 0.0940069170010247,
+        "mean_package_bids": 592.6666666666666,
+        "max_package_bids": 640,
+        "mean_package_awards": 5.333333333333333
+      }
+    },
+    "worst_case_n_lots": 20,
+    "passed": true
+  },
+  "search_uplift": {
+    "mean_abs_gain_vs_category": 2644.261052103926,
+    "median_abs_gain_vs_category": 322.8850000000002,
+    "mean_abs_gain_vs_best_baseline": 2589.9494271039257,
+    "median_abs_gain_vs_best_baseline": 206.1165000000001,
+    "search_win_rate_gt_zero": 0.875,
+    "search_win_rate_gt_2pct": 0.25,
+    "passed": true
+  },
+  "calibration_bridge": {
+    "required_artifacts": {
+      "gpv_estimator": "/Users/duy/Documents/build/cs224r/procurement-gym/src/procurement_gym/suppliers/gpv.py",
+      "calibrated_generator": "/Users/duy/Documents/build/cs224r/procurement-gym/src/procurement_gym/instances/calibrated.py",
+      "calibration_script": "/Users/duy/Documents/build/cs224r/procurement-gym/scripts/calibrate.py"
+    },
+    "missing": [
+      "gpv_estimator",
+      "calibrated_generator",
+      "calibration_script"
+    ],
+    "passed": false
+  },
+  "oracle_correctness_ready": true,
+  "simulated_training_ready": true,
+  "production_readiness": false
+}

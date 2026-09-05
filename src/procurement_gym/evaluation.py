@@ -44,6 +44,15 @@ def evaluate_partition(
     solver = ORToolsWDPSolver(timeout_s=solver_timeout_s)
 
     sim_result = simulator.simulate(partition, instance, rng)
+    base_info = {
+        "total_cost": 0.0,
+        "n_lots": partition.n_lots,
+        "lot_overhead_total": 0.0,
+        "optimality_gap": float("inf"),
+        "solve_time_s": 0.0,
+        "n_package_bids": len(sim_result.package_bids),
+        "n_package_awards": 0,
+    }
 
     # Build solver inputs
     bids: dict[int, dict[int, float]] = {}
@@ -76,7 +85,11 @@ def evaluate_partition(
         penalty = -10.0 * mean_item_value * n_unserviced
         return EvalResult(
             reward=float(penalty),
-            info={"status": "ALL_UNSERVICED", "n_unserviced": n_unserviced},
+            info={
+                **base_info,
+                "status": "ALL_UNSERVICED",
+                "n_unserviced": n_unserviced,
+            },
         )
 
     # Volume tiers from config
@@ -99,7 +112,11 @@ def evaluate_partition(
         penalty = -10.0 * mean_item_value * (len(bids) + n_unserviced)
         return EvalResult(
             reward=float(penalty),
-            info={"status": "INFEASIBLE", "n_unserviced": n_unserviced},
+            info={
+                **base_info,
+                "status": "INFEASIBLE",
+                "n_unserviced": n_unserviced,
+            },
         )
 
     reward = serviced_value - solver_result.total_cost
@@ -114,14 +131,13 @@ def evaluate_partition(
         reward -= lot_overhead_total
 
     info = {
+        **base_info,
         "status": solver_result.status,
         "total_cost": solver_result.total_cost,
-        "n_lots": partition.n_lots,
         "n_unserviced": n_unserviced,
         "lot_overhead_total": lot_overhead_total,
         "optimality_gap": solver_result.optimality_gap,
         "solve_time_s": solver_result.solve_time_s,
-        "n_package_bids": len(sim_result.package_bids),
         "n_package_awards": len(solver_result.package_awards),
     }
     return EvalResult(reward=float(reward), info=info)

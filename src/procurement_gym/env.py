@@ -158,6 +158,15 @@ class ProcurementEnv(gymnasium.Env[dict[str, np.ndarray[Any, Any]], int]):
         sim_rng = np.random.default_rng(sim_seed)
 
         sim_result = self._simulator.simulate(self._partition, self._instance, sim_rng)
+        base_info = {
+            "total_cost": 0.0,
+            "n_lots": self._partition.n_lots,
+            "lot_overhead_total": 0.0,
+            "optimality_gap": float("inf"),
+            "solve_time_s": 0.0,
+            "n_package_bids": len(sim_result.package_bids),
+            "n_package_awards": 0,
+        }
 
         # Build solver inputs
         bids: dict[int, dict[int, float]] = {}
@@ -191,7 +200,11 @@ class ProcurementEnv(gymnasium.Env[dict[str, np.ndarray[Any, Any]], int]):
         if not bids:
             # All lots unserviced — large penalty
             penalty = -10.0 * mean_item_value * n_unserviced
-            return float(penalty), {"status": "ALL_UNSERVICED", "n_unserviced": n_unserviced}
+            return float(penalty), {
+                **base_info,
+                "status": "ALL_UNSERVICED",
+                "n_unserviced": n_unserviced,
+            }
 
         # Build volume tiers from config
         cfg = self._config.supplier_model
@@ -213,7 +226,11 @@ class ProcurementEnv(gymnasium.Env[dict[str, np.ndarray[Any, Any]], int]):
         if solver_result.status == "INFEASIBLE":
             # Only penalize lots that were sent to solver (had entrants)
             penalty = -10.0 * mean_item_value * (len(bids) + n_unserviced)
-            return float(penalty), {"status": "INFEASIBLE", "n_unserviced": n_unserviced}
+            return float(penalty), {
+                **base_info,
+                "status": "INFEASIBLE",
+                "n_unserviced": n_unserviced,
+            }
 
         # Reward = value of serviced items - cost paid - penalty for unserviced
         reward = serviced_value - solver_result.total_cost
@@ -228,14 +245,13 @@ class ProcurementEnv(gymnasium.Env[dict[str, np.ndarray[Any, Any]], int]):
             reward -= lot_overhead_total
 
         info = {
+            **base_info,
             "status": solver_result.status,
             "total_cost": solver_result.total_cost,
-            "n_lots": self._partition.n_lots,
             "n_unserviced": n_unserviced,
             "lot_overhead_total": lot_overhead_total,
             "optimality_gap": solver_result.optimality_gap,
             "solve_time_s": solver_result.solve_time_s,
-            "n_package_bids": len(sim_result.package_bids),
             "n_package_awards": len(solver_result.package_awards),
         }
         return float(reward), info

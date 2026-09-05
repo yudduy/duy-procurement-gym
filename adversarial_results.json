@@ -1,0 +1,236 @@
+{
+  "1_single_item_degeneracy": {
+    "attack": "single_item_degeneracy",
+    "summary": {
+      "category": {
+        "mean_reward": -8051.9409745225375,
+        "mean_n_lots": 3.0,
+        "mean_unserviced": 0.0,
+        "mean_package_bids": 6.253333333333333,
+        "mean_package_awards": 0.02666666666666667,
+        "mean_total_cost": 658.6790733333333
+      },
+      "single_item": {
+        "mean_reward": 15350.346350645717,
+        "mean_n_lots": 20.0,
+        "mean_unserviced": 0.0,
+        "mean_package_bids": 2914.26,
+        "mean_package_awards": 8.926666666666668,
+        "mean_total_cost": 2823.1076666666663
+      },
+      "geographic": {
+        "mean_reward": -9223.166990146166,
+        "mean_n_lots": 3.0,
+        "mean_unserviced": 0.0,
+        "mean_package_bids": 8.606666666666664,
+        "mean_package_awards": 0.02,
+        "mean_total_cost": 560.7874800000001
+      }
+    },
+    "verdict": "PASS: Single-item wins genuinely, not through penalty avoidance"
+  },
+  "2_reward_gap_magnitude": {
+    "attack": "reward_gap_magnitude",
+    "results": {
+      "0.0": {
+        "coupling": 0.0,
+        "mean_gap_ratio": 0.8535166345752649,
+        "median_gap_ratio": 0.8997816623828188,
+        "pct_gap_lt_1": 3.3333333333333335,
+        "mean_absolute_gap": 8760.98281198463,
+        "mean_relative_gap": 0.49577735172519416
+      },
+      "0.5": {
+        "coupling": 0.5,
+        "mean_gap_ratio": 0.5130093786311863,
+        "median_gap_ratio": 0.4165295787223434,
+        "pct_gap_lt_1": 3.3333333333333335,
+        "mean_absolute_gap": 3570.248985417895,
+        "mean_relative_gap": 0.1566229107597796
+      },
+      "1.0": {
+        "coupling": 1.0,
+        "mean_gap_ratio": 72.66374328357193,
+        "median_gap_ratio": 1.4247862308258425,
+        "pct_gap_lt_1": 3.3333333333333335,
+        "mean_absolute_gap": 9472.566139672324,
+        "mean_relative_gap": 0.6317698021771495
+      }
+    },
+    "verdict": "PASS: Gaps are meaningful (ratio=72.66, relative=0.632)"
+  },
+  "3_nlots_sensitivity": {
+    "attack": "nlots_sensitivity",
+    "wins_by_nlots": {
+      "2": {
+        "category": 6,
+        "single_item": 14
+      },
+      "3": {
+        "geographic": 7,
+        "equal_size": 4,
+        "random": 2,
+        "category": 2,
+        "single_item": 5
+      },
+      "5": {
+        "geographic": 14,
+        "category": 2,
+        "equal_size": 2,
+        "single_item": 1,
+        "random": 1
+      },
+      "7": {
+        "category": 6,
+        "geographic": 8,
+        "equal_size": 6
+      },
+      "10": {
+        "category": 6,
+        "geographic": 7,
+        "random": 3,
+        "equal_size": 4
+      }
+    },
+    "worst_dominance": {
+      "n_lots": 2,
+      "pct": 70.0
+    },
+    "verdict": "PASS: No n_lots setting creates >70% dominance (worst: 70% at n_lots=2)"
+  },
+  "4_hybrid_strategy": {
+    "attack": "hybrid_strategy",
+    "results": {
+      "0.0": {
+        "coupling": 0.0,
+        "wins": {
+          "category": 27,
+          "category_geo_mix": 2,
+          "geographic": 1
+        },
+        "win_rates": {
+          "category": 90.0,
+          "category_geo_mix": 6.7,
+          "geographic": 3.3
+        },
+        "mean_rewards": {
+          "category": 17237.7,
+          "single_item": -9252.2,
+          "geographic": 6828.8,
+          "oracle_hybrid": 17237.7,
+          "category_geo_mix": 16696.1
+        }
+      },
+      "0.5": {
+        "coupling": 0.5,
+        "wins": {
+          "geographic": 6,
+          "category": 7,
+          "single_item": 15,
+          "category_geo_mix": 2
+        },
+        "win_rates": {
+          "geographic": 20.0,
+          "category": 23.3,
+          "single_item": 50.0,
+          "category_geo_mix": 6.7
+        },
+        "mean_rewards": {
+          "category": 13876.7,
+          "single_item": 17960.9,
+          "geographic": 9802.4,
+          "oracle_hybrid": 9802.4,
+          "category_geo_mix": 15640.1
+        }
+      },
+      "1.0": {
+        "coupling": 1.0,
+        "wins": {
+          "category_geo_mix": 10,
+          "geographic": 12,
+          "category": 6,
+          "single_item": 2
+        },
+        "win_rates": {
+          "category_geo_mix": 33.3,
+          "geographic": 40.0,
+          "category": 20.0,
+          "single_item": 6.7
+        },
+        "mean_rewards": {
+          "category": -8462.9,
+          "single_item": 15132.3,
+          "geographic": 1305.9,
+          "oracle_hybrid": 15132.3,
+          "category_geo_mix": 12544.8
+        }
+      }
+    },
+    "verdict": "PASS: No hybrid dominates across all coupling levels (oracle=0/90, mix=14/90)"
+  },
+  "5_package_utilization": {
+    "attack": "package_utilization",
+    "avg_package_bids": 9.8,
+    "avg_package_awards": 0.03,
+    "pct_with_awards": 2.5,
+    "reward_with_coupling_mean": -10330.7,
+    "reward_without_coupling_mean": -20428.4,
+    "verdict": "PASS: Capacity binding creates coupling (reward diff=10098 with vs without coupling)"
+  },
+  "6_seed_sensitivity": {
+    "attack": "seed_sensitivity",
+    "results_by_range": {
+      "original": {
+        "wins": {
+          "geographic": 8,
+          "category": 3,
+          "random": 4,
+          "equal_size": 8,
+          "single_item": 7
+        },
+        "win_rates": {
+          "geographic": 26.7,
+          "category": 10.0,
+          "random": 13.3,
+          "equal_size": 26.7,
+          "single_item": 23.3
+        }
+      },
+      "shifted_50k": {
+        "wins": {
+          "equal_size": 11,
+          "category": 4,
+          "geographic": 8,
+          "random": 4,
+          "single_item": 3
+        },
+        "win_rates": {
+          "equal_size": 36.7,
+          "category": 13.3,
+          "geographic": 26.7,
+          "random": 13.3,
+          "single_item": 10.0
+        }
+      },
+      "shifted_99k": {
+        "wins": {
+          "equal_size": 12,
+          "geographic": 8,
+          "single_item": 5,
+          "category": 1,
+          "random": 4
+        },
+        "win_rates": {
+          "equal_size": 40.0,
+          "geographic": 26.7,
+          "single_item": 16.7,
+          "category": 3.3,
+          "random": 13.3
+        }
+      }
+    },
+    "consistent_winner": false,
+    "max_swing_pp": 13.3,
+    "verdict": "PASS: No trivial dominance across seeds (max_swing=13pp, max_dominance=40%)"
+  }
+}

@@ -1,0 +1,35 @@
+# PLAN: Flow YAML for SFT training on B200. Clones from git.
+# SOURCE: CLAUDE.md flow YAML patterns
+name: procurement-sft
+instance_type: 1xneb-b200
+max_price_per_hour: 0.03
+upload_code: false
+terminate_on_exit: true
+command: |
+  set -euo pipefail
+  unset http_proxy https_proxy
+  export TRITON_PTXAS_PATH=/usr/local/cuda/bin/ptxas
+
+  # Clone repo
+  git clone https://github.com/yudduy/duy-procurement-gym.git /workspace/procurement-gym
+  cd /workspace/procurement-gym
+
+  # Install deps (never pip install torch on B200)
+  pip install --no-deps trl peft
+  pip install datasets accelerate bitsandbytes safetensors
+  pip install ortools pydantic numpy
+  pip install fa4 2>/dev/null || true
+  pip install -e . --no-deps
+
+  # Verify
+  python -c "import torch; print(f'torch={torch.__version__}, cuda={torch.cuda.is_available()}')"
+  python -c "from trl import SFTTrainer; print('TRL OK')"
+
+  # Train
+  python scripts/train_sft.py Qwen/Qwen2.5-7B-Instruct sft_data.jsonl /volumes/proc/sft
+volumes:
+  - name: proc-ckpts
+    size_gb: 50
+    mount_path: /volumes/proc
+    interface: file
+    create_if_missing: true

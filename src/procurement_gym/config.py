@@ -67,6 +67,11 @@ class SupplierModelConfig(BaseModel):
         le=1.0,
         description="Min synergy for package bid (softened by coupling_strength)",
     )
+    max_packages_per_supplier: int = Field(
+        64,
+        ge=1,
+        description="Cap emitted package bids per supplier to bound verifier runtime",
+    )
     volume_tier_thresholds: tuple[float, ...] = Field(
         (), description="Volume thresholds for discount tiers (empty=disabled)"
     )

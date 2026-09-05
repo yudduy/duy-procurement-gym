@@ -1,0 +1,7 @@
+name: test-alloc
+instance_type: 1xneb-b200
+max_price_per_hour: 0.10
+upload_code: false
+terminate_on_exit: true
+command: |
+  nvidia-smi && echo "ALLOC OK"

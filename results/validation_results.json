@@ -1,0 +1,159 @@
+{
+  "coupling_0.0": {
+    "coupling_strength": 0.0,
+    "n_instances": 50,
+    "n_seeds_per_eval": 10,
+    "elapsed_s": 5.2,
+    "metrics": {
+      "snr": 4.66,
+      "kendall_tau": 0.628,
+      "gap_best_vs_random": 10020.31,
+      "gap_ratio": 4.66,
+      "mean_noise_std": 2150.34
+    },
+    "thresholds": {
+      "snr_pass": true,
+      "tau_pass": false,
+      "gap_pass": true
+    },
+    "best_strategy": "category",
+    "strategies": {
+      "category": {
+        "mean": 17481.882480322063,
+        "std": 2529.5262428752512,
+        "min": 3634.681871544727,
+        "max": 20525.71475311529
+      },
+      "geographic": {
+        "mean": 8312.82183206974,
+        "std": 3976.061511112608,
+        "min": 800.4771111366848,
+        "max": 17453.61025459355
+      },
+      "equal_size": {
+        "mean": 7452.778863465736,
+        "std": 4724.134015577407,
+        "min": -4265.403906349987,
+        "max": 16604.590370882746
+      },
+      "random": {
+        "mean": 7461.574280808679,
+        "std": 4544.770391640194,
+        "min": -4117.1960897724,
+        "max": 14892.182526084734
+      },
+      "single_item": {
+        "mean": -6947.293288330896,
+        "std": 6272.411957783434,
+        "min": -23085.085369295513,
+        "max": 5345.1507724172225
+      }
+    },
+    "verdict": "NO-GO"
+  },
+  "coupling_0.5": {
+    "coupling_strength": 0.5,
+    "n_instances": 50,
+    "n_seeds_per_eval": 10,
+    "elapsed_s": 26.0,
+    "metrics": {
+      "snr": 5.97,
+      "kendall_tau": 0.391,
+      "gap_best_vs_random": 5647.11,
+      "gap_ratio": 5.97,
+      "mean_noise_std": 946.37
+    },
+    "thresholds": {
+      "snr_pass": true,
+      "tau_pass": false,
+      "gap_pass": true
+    },
+    "best_strategy": "category",
+    "strategies": {
+      "category": {
+        "mean": 17329.443338381694,
+        "std": 6971.563252022001,
+        "min": -30576.131829268357,
+        "max": 20866.432153115293
+      },
+      "geographic": {
+        "mean": 10776.775400256873,
+        "std": 5513.442507736505,
+        "min": -7425.640226689449,
+        "max": 19018.07726058982
+      },
+      "equal_size": {
+        "mean": 11163.542731841058,
+        "std": 4560.06683557431,
+        "min": -2627.344439054961,
+        "max": 18821.597302732982
+      },
+      "random": {
+        "mean": 11682.335375142002,
+        "std": 4632.470365405347,
+        "min": -7258.225669800939,
+        "max": 18887.42220273298
+      },
+      "single_item": {
+        "mean": 6183.096248227202,
+        "std": 6314.55638875267,
+        "min": -22149.457185406845,
+        "max": 14820.706989758142
+      }
+    },
+    "verdict": "NO-GO"
+  },
+  "coupling_1.0": {
+    "coupling_strength": 1.0,
+    "n_instances": 50,
+    "n_seeds_per_eval": 10,
+    "elapsed_s": 139.7,
+    "metrics": {
+      "snr": 2.18,
+      "kendall_tau": 0.323,
+      "gap_best_vs_random": 6681.2,
+      "gap_ratio": 2.18,
+      "mean_noise_std": 3065.43
+    },
+    "thresholds": {
+      "snr_pass": false,
+      "tau_pass": false,
+      "gap_pass": true
+    },
+    "best_strategy": "single_item",
+    "strategies": {
+      "category": {
+        "mean": 17706.135938738953,
+        "std": 2797.7613406713704,
+        "min": 8791.541701959291,
+        "max": 20809.571090948517
+      },
+      "geographic": {
+        "mean": 14748.08787011096,
+        "std": 4721.61737082885,
+        "min": -5512.870032653749,
+        "max": 20122.481676662912
+      },
+      "equal_size": {
+        "mean": 15708.210212480499,
+        "std": 3974.2091093638987,
+        "min": 4020.7882686739204,
+        "max": 20659.794590948517
+      },
+      "random": {
+        "mean": 13922.778964384675,
+        "std": 7033.298781617118,
+        "min": -20490.303951546324,
+        "max": 20330.87202269077
+      },
+      "single_item": {
+        "mean": 20603.979684089318,
+        "std": 7822.306499169262,
+        "min": 7199.390257148099,
+        "max": 43827.39769913473
+      }
+    },
+    "verdict": "NO-GO"
+  },
+  "overall_verdict": "NO-GO"
+}
